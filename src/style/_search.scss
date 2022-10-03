@@ -1,0 +1,27 @@
+.search {
+  position: relative;
+  max-width: 580px;
+  width: 100%;
+  height: 46px;
+
+  &__input {
+    width: 100%;
+    height: 100%;
+    padding: 10px 24px;
+    border: none;
+    font-weight: 300;
+    color: #A9A9A9;
+    background-color: #FFFFFF;
+    border-radius: 6px;
+  }
+
+  &__submit {
+    line-height: 0;
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    transform: translateY(-50%);
+  }
+}
+
+
