@@ -2,4 +2,81 @@ $back: #F2F5FC;
 $text: #000;
 
 
+@mixin bottomLine {
+  &:after {
+    content: '';
+    position: absolute;
+    display: block;
+    height: 1px;
+    width: 100%;
+    background-color: $text;
+    bottom: 2px;
+  }
+}
+
+
+@mixin laptop {
+  @media (max-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin tablet {
+  @media (max-width: 768px) {
+    @content;
+  }
+}
+
+@mixin mobile {
+  @media (max-width: 520px) {
+    @content;
+  }
+}
+
+@mixin mini {
+  @media (max-width: 360px) {
+    @content;
+  }
+}
+
+
+//@mixin max-width ($width) {
+//  @media (max-width: $width) {
+//    @content;
+//  }
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
