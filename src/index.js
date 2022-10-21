@@ -4,10 +4,11 @@ import {modalController} from "./modules/modalController";
 import {selectController} from "./modules/selectController";
 import {showPassword} from "./modules/showPassword";
 import {choicesController} from "./modules/choicesController";
-import {avatarController} from "./modules/avatarController";
 import {getCategory} from "./modules/getCategory";
 import {renderList} from "./modules/renderList";
 import {searchControl} from "./modules/searchControl";
+import {ratingController} from "./modules/ratingController";
+import {signUpController} from "./modules/sign";
 
 const init = () => {
   modalController({
@@ -16,10 +17,14 @@ const init = () => {
     btnClose: '.modal__close'
   });
 
-  modalController({
+  const eventModalSignUp = modalController({
     modal: '.modal_sign-up',
     btnOpen: '.header__auth-btn_sign-up',
-    btnClose: '.modal__close'
+    btnClose: '.modal__close',
+    handlerCloseModal: () => {
+      const form = document.querySelector('.form__sign-up');
+      form.reset();
+    },
   });
 
   modalController({
@@ -62,14 +67,13 @@ const init = () => {
 
   showPassword();
   choicesController();
-  const crp = avatarController({
-    inputFile: '.avatar__input',
-    uploadResult: '.avatar__result',
-  });
 
   getCategory();
   renderList();
   searchControl();
+  ratingController();
+
+  signUpController(eventModalSignUp.closeModal);
 
 };
 
