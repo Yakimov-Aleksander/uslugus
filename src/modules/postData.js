@@ -7,7 +7,7 @@ export const postData = async (url, data, method = 'POST') => {
       body: JSON.stringify(data),
     });
 
-    if (response.ok) {
+    if (response.ok && response.status !== 404) {
       return await  response.json();
     } else {
       throw new CustomError(await response.json());

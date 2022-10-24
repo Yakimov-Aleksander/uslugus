@@ -1,22 +1,22 @@
 export const modalController = ({
-  modal,
-  btnOpen,
-  btnClose,
-  time = 300,
-  parrentBtns,
-  handlerOpenModal = () => {},
-  handlerCloseModal = () => {},
-}) => {
+                                  modal,
+                                  btnOpen,
+                                  btnClose,
+                                  time = 300,
+                                  parrentBtns,
+                                  handlerOpenModal = () => {},
+                                  handlerCloseModal = () => {},
+                                }) => {
   const handlerElems = parrentBtns
-      ? document.querySelector(parrentBtns)
-      : document.querySelectorAll(btnOpen);
+    ? document.querySelector(parrentBtns)
+    : document.querySelectorAll(btnOpen);
   const modalElem = document.querySelector(modal);
 
   modalElem.style.cssText = `
-    display: flex;
-    visibility: hidden;
-    opacity: 0;
-    transition: opacity ${time}ms ease-in-out;
+		display: flex;
+		visibility: hidden;
+		opacity: 0;
+		transition: opacity ${time}ms ease-in-out;
   `;
 
   const data = {
@@ -37,39 +37,38 @@ export const modalController = ({
         event.code === 'Escape' ||
         event.type === 'submit'
       ) {
-        modalElem.style.opacity = 0;
+        modalElem.style.opacity = '0';
 
         setTimeout(() => {
           modalElem.style.visibility = 'hidden';
-          data.handlerCloseModal();
+          data.handlerCloseModal({modalElem});
         }, time);
+
 
         window.removeEventListener('keydown', data.closeModal);
       }
     },
-    openModal: async () => {
-      await data.handlerOpenModal();
+    openModal: async (handler) => {
+      await data.handlerOpenModal({handler, modalElem});
       modalElem.style.visibility = 'visible';
-      modalElem.style.opacity = 1;
+      modalElem.style.opacity = '1';
       window.addEventListener('keydown', data.closeModal)
     },
 
-  };
-
+  }
 
   if (parrentBtns) {
-      handlerElems.addEventListener('click', ({target}) => {
-        if(target.closest(btnOpen)) {
-          data.openModal();
-        }
-      });
+    handlerElems.addEventListener('click', ({target}) => {
+      const handler = target.closest(btnOpen);
+      if (handler) {
+        data.openModal(handler)
+      }
+    })
   } else {
     handlerElems.forEach(btn => {
       btn.addEventListener('click', data.openModal);
     });
   }
-
-
 
   modalElem.addEventListener('click', data.closeModal);
 

@@ -1,15 +1,35 @@
 import {avatarController} from "./avatarController";
-import {postData} from "./postData"
-import {API_URL} from "./const"
-import {createCard} from "./createCard"
+import {postData} from "./postData";
+import {API_URL} from "./const";
+import {createCard} from "./createCard";
+import {auth} from "./auth";
 
 
-export const signInController = () => {
+export const signInController = (callback) => {
+  const form = document.querySelector('.form-sign-in');
 
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData);
+
+    const dataResponse = await postData(`${API_URL}/api/service/signin`, data);
+
+    if(dataResponse.errors) {
+      console.log(dataResponse.errors); // todo обработка ошибки
+      return;
+    }
+
+    callback(e);
+
+    auth(dataResponse);
+  });
 };
 
 export const signUpController = (callback) => {
-  const form = document.querySelector('.form__sign-up');
+  const form = document.querySelector('.form-sign-up');
 
   const crp = avatarController({
     inputFile: '.avatar__input',
@@ -31,16 +51,20 @@ export const signUpController = (callback) => {
       size: 'viewport',
     });
 
-  //const dataResponse = await postData(`${API_URL}/api/service/signup`, data);
+  const dataResponse = await postData(`${API_URL}/api/service/signup`, data);
 
-    // if(dataResponse.errors) {
-    //   console.log(dataResponse.errors); // todo обработка ошибки
-    //   return;
-    // }
+    if(dataResponse.errors) {
+      console.log(dataResponse.errors); // todo обработка ошибки
+      // dataResponse.errors.forEach(error => {
+      //   form[error.field].style.border = '1px solid red';
+      // })
+      return;
+    }
 
     const servicesList = document.querySelector('.services__list');
-    //servicesList.append(createCard(dataResponse));
+    servicesList.append(createCard(dataResponse));
 
+    auth(dataResponse);
     form.reset();
     crp.hideAvatar();
     callback(e);

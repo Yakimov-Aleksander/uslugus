@@ -8,10 +8,13 @@ import {getCategory} from "./modules/getCategory";
 import {renderList} from "./modules/renderList";
 import {searchControl} from "./modules/searchControl";
 import {ratingController} from "./modules/ratingController";
-import {signUpController} from "./modules/sign";
+import {signInController, signUpController} from "./modules/sign";
+import {getData} from "./modules/getData";
+import {API_URL} from "./modules/const";
+
 
 const init = () => {
-  modalController({
+  const eventModalSignIn = modalController({
     modal: '.modal_sign-in',
     btnOpen: '.header__auth-btn_sign-in',
     btnClose: '.modal__close'
@@ -21,21 +24,16 @@ const init = () => {
     modal: '.modal_sign-up',
     btnOpen: '.header__auth-btn_sign-up',
     btnClose: '.modal__close',
-    handlerCloseModal: () => {
-      const form = document.querySelector('.form__sign-up');
-      form.reset();
-    },
   });
 
   modalController({
     modal: '.modal_person',
-    btnOpen: '.services',
+    btnOpen: '.service',
     parrentBtns: '.services__list',
     btnClose: '.modal__close',
-    handlerOpenModal: async () => {
-      const data = await fetch('https://jsonplaceholder.typicode.com/todos/1')
-        .then(response => response.json());
-
+    handlerOpenModal: async ({handler, modalElem}) => {
+      const data = await getData(`${API_URL}/api/service/${handler.dataset.id}`);
+      console.log(data);
       const comments = document.querySelectorAll('.review__text');
 
       comments.forEach((comment) => {
@@ -48,25 +46,26 @@ const init = () => {
           button.addEventListener('click', () => {
             comment.classList.toggle('review__text_open');
             button.textContent = comment.classList.contains('review__text_open')
-                ? 'Свернуть'
-                : 'Развернуть';
+              ? 'Свернуть'
+              : 'Развернуть';
           })
         }
       })
     }
   });
 
-  selectController({
+  selectController( {
     openBtn: '.category__title',
     openBlock: '.category__list',
     closeBtn: '.category__btn',
     handlerChange: (value) => {
-      console.log(value);
+      console.log(value)
     }
   });
 
   showPassword();
   choicesController();
+
 
   getCategory();
   renderList();
@@ -75,6 +74,7 @@ const init = () => {
 
   signUpController(eventModalSignUp.closeModal);
 
+  signInController(eventModalSignIn.closeModal)
 };
 
 init();
