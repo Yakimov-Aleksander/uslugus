@@ -72,7 +72,6 @@ const init = async () => {
 
 
   searchControl();
-  ratingController();
 
   signUpController(eventModalSignUp.closeModal);
 
